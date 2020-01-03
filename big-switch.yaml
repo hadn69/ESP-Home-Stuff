@@ -1,0 +1,44 @@
+esphome:
+  name: big_switch
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  ssid: "McDonald's Free WiFi"
+  password: "**************"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Big Switch Fallback Hotspot"
+    password: "**************"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+  - platform: gpio
+    pin: 
+        number: 22
+        mode: INPUT_PULLDOWN
+    name: "Workshop Light"
+    device_class: light
+    on_press:
+        then:
+            - homeassistant.service:
+                service: homeassistant.toggle
+                data:
+                    entity_id: switch.leviton_dzpa1_2bw_plug_in_outlet_switch
+
+deep_sleep:
+  run_duration: 30s
+  sleep_duration: 60min
+  wakeup_pin:
+    number: 39
+    mode: INPUT_PULLDOWN
